@@ -1,4 +1,5 @@
-import { Controller, Get, Redirect } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import User from 'src/model/user.entity';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -7,6 +8,10 @@ export class UsersController {
 
   @Get()
   index(): string {
-    return this.usersService.auth();
+    return 'im alive';
+  }
+  @Get('/generate-admin')
+  generateAdmin(): Promise<User> {
+    return this.usersService.generateAdmin();
   }
 }
