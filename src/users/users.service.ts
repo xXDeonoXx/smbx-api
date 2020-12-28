@@ -21,10 +21,14 @@ export class UsersService {
     @InjectRepository(User) private readonly repo: Repository<User>,
   ) {}
 
-  find = async (id?: string | number): Promise<User[]> => {
+  find = async (id?: string | number): Promise<User | User[]> => {
     return id
       ? await this.repo.find({ where: { id: id } })
       : await this.repo.find();
+  };
+
+  findOne = async (query): Promise<User> => {
+    return await this.repo.findOne({ where: { ...query } });
   };
 
   create = async ({ body }: CreateUserProps): Promise<User> => {

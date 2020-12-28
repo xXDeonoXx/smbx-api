@@ -7,10 +7,12 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import User from 'src/model/user.entity';
-import { DeleteResult } from 'typeorm';
+import { AuthService } from '../auth/auth.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import User from '../model/user.entity';
 import { CreateUserDto } from './dto/create-user-dto';
 import { UpdateUserDto } from './dto/update-user-dto';
 import { UsersService } from './users.service';
@@ -18,7 +20,10 @@ import { UsersService } from './users.service';
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService,
+  ) {}
 
   // Get all users
   @Get()
@@ -27,9 +32,10 @@ export class UsersController {
   }
 
   // Get User by id
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   getById(@Param('id') id: string): Promise<User | User[]> {
-    return this.usersService.find(id);
+    return this.usersService.findOne({ id });
   }
 
   // Create new User
