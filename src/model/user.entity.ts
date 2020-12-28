@@ -1,5 +1,7 @@
+import { Exclude } from 'class-transformer';
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import bcrypt from 'bcrypt';
+const bcrypt = require('bcrypt');
+
 @Entity('users')
 export default class User {
   @PrimaryGeneratedColumn()
@@ -12,6 +14,7 @@ export default class User {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column()
@@ -19,5 +22,9 @@ export default class User {
 
   @BeforeInsert() async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
+  }
+
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
   }
 }
