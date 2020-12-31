@@ -19,7 +19,7 @@ export default class Level {
   name: string;
 
   @Column()
-  nickname?: string;
+  url: string;
 
   @JoinColumn({
     name: 'user_id',

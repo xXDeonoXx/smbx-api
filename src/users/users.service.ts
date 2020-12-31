@@ -28,7 +28,7 @@ export class UsersService {
   };
 
   findOne = async (query): Promise<User> => {
-    return await this.repo.findOne({ where: { ...query } });
+    return await this.repo.findOne({ ...query });
   };
 
   create = async ({ body }: CreateUserProps): Promise<User> => {
