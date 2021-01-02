@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GoogleCloud } from '../services/google-cloud';
 import { Repository } from 'typeorm';
 import Level from '../model/level.entity';
 import User from '../model/user.entity';
@@ -17,6 +18,7 @@ export class LevelsService {
   constructor(
     @InjectRepository(Level) private readonly repo: Repository<Level>,
     private usersService: UsersService,
+    private googleCloud: GoogleCloud,
   ) {}
 
   find = async (query): Promise<Level[]> => {
@@ -40,10 +42,11 @@ export class LevelsService {
         HttpStatus.BAD_REQUEST,
       );
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    const fileUrl = await this.googleCloud.uploadFile(file);
     const level: Level = new Level({
       name: body.name,
       user,
-      url: 'http://www.google.com',
+      url: fileUrl,
     });
     await this.repo.save(level);
     return level;

@@ -5,6 +5,7 @@ import { UsersModule } from '../users/users.module';
 import Level from '../model/level.entity';
 import { LevelsController } from './levels.controller';
 import { LevelsService } from './levels.service';
+import { GoogleCloud } from '../services/google-cloud';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { LevelsService } from './levels.service';
     UsersModule,
   ],
   controllers: [LevelsController],
-  providers: [LevelsService],
+  providers: [LevelsService, GoogleCloud],
 })
 export class LevelsModule {}
